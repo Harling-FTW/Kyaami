@@ -1,3 +1,4 @@
+from sre_constants import CATEGORY
 from unicodedata import category
 from django.db import models
 import uuid
@@ -5,14 +6,19 @@ import uuid
 
 # Create your models here.
 class Admin(models.Model):
+    ROLES = (
+        ('System Admin', 'System Admin'), 
+        ('Management Team','Management Team'), 
+        ('Site Admin','Site Admin'),
+    )
+
     admin_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    level = models.CharField(max_length=16)
+    role = models.SmallIntegerField(default=0, choices=ROLES)
     cell_no = models.CharField(max_length=16)
     email = models.EmailField(max_length=32)
     admin= models.CharField(max_length=16)
 
 class Log_Record(models.Model):
-    
     location = models.CharField(max_length=16)
     device = models.CharField(max_length=16)
     username = models.CharField(max_length=16)
@@ -48,17 +54,28 @@ class To_do_list(models.Model):
     done = models.BooleanField(default=False)
 
 class Abuse_reports(models.Model):
+    VIOLATION=( 
+        ('Spam', 'Spam'),
+        ('Copyright Violation', 'Copyright Violation'),
+        ('Flagged Content', 'Flagged Content'),
+    )
     id = models.UUIDField(primary_key=True, default = uuid.uuid4)
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
     date =  models.DateField()
-    #violation  = 
-    by_user =  models.BooleanField()
+    violation = models.SmallIntegerField(default = 0, choices=VIOLATION)
+    by_user = models.BooleanField()
     by_system = models.BooleanField()
 
 class Bug_reports(models.Model):
+    CATEGORY = (
+        ('Data Loss', 'Data Loss'),
+        ('Profile Registration', 'Profile Registration'),
+        ('Messaging', 'Messaging'),
+    )
+
     id = models.UUIDField(primary_key=True, default = uuid.uuid4)
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
-    #category = 
+    category = models.SmallIntegerField(default=0, choices=CATEGORY)
     detail = models.TextField()
     
