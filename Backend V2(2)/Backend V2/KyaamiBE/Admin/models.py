@@ -13,7 +13,7 @@ class Admin(models.Model):
     )
 
     admin_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    role = models.SmallIntegerField(default=0, choices=ROLES)
+    role = models.SmallIntegerField(default=0, null=False, blank=False, choices=ROLES)
     cell_no = models.CharField(max_length=16)
     email = models.EmailField(max_length=32)
     admin= models.CharField(max_length=16)
