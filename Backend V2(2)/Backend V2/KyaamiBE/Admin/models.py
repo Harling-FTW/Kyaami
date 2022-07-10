@@ -1,8 +1,8 @@
+from sre_constants import CATEGORY
+from unicodedata import category
 from django.db import models
 import uuid
-import sys
-sys.path.append("..")
-
+#from ..User.models import User
 
 # Create your models here.
 class Admin(models.Model):
@@ -13,7 +13,7 @@ class Admin(models.Model):
     )
 
     admin_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    role = models.SmallIntegerField(default=0, null=False, blank=False, choices=ROLES)
+    role = models.CharField(max_length=200, default=0, choices=ROLES)
     cell_no = models.CharField(max_length=16)
     email = models.EmailField(max_length=32)
     admin= models.CharField(max_length=16)
@@ -25,28 +25,28 @@ class Log_Record(models.Model):
     device = models.CharField(max_length=16)
     username = models.CharField(max_length=16)
     time = models.DateTimeField()
-    user_id= models.ForeignKey('User.User', on_delete=models.CASCADE)
+    user_id= models.ForeignKey('User.User', default=0, on_delete=models.CASCADE)
     login_no = models.UUIDField(primary_key=True,default = uuid.uuid4)
     def __str__(self):
-        return self.login_no + ' ' + self.user_id
+        return self.login_no + " " + self.user_id
 
 class Purchase(models.Model):
     distributor = models.CharField(max_length=16)
     provider = models.CharField(max_length=16)
     purchase_time = models.DateTimeField()
     purchase_details = models.TextField()
-    user_id= models.ForeignKey('User.User', on_delete=models.CASCADE)
+    user_id= models.ForeignKey('User.User', default=0, on_delete=models.CASCADE)
     purchase_id = models.UUIDField(primary_key=True,default = uuid.uuid4)
     def __str__(self):
-        return self.purchase_id + ' ' + self.purchase_details
+        return self.purchase_details + ' ' + self.purchase_details
 
 class Comment(models.Model):
     reference = models.URLField()
     comment = models.TextField()
-    commenter_id= models.ForeignKey('User.User', on_delete=models.CASCADE)
+    commenter_id= models.ForeignKey('User.User', default = 0, on_delete=models.CASCADE)
     comment_id = models.UUIDField(primary_key=True,default = uuid.uuid4)
     def __str__(self):
-        return self.comment_id + ' ' + self.commenter_id
+        return self.comment_id + ' ' + self.comment_id
 
 class Order(models.Model):
     #item = models.ImageField()#dont know blob field
@@ -56,14 +56,14 @@ class Order(models.Model):
     order_id = models.UUIDField(primary_key=True,default = uuid.uuid4)
     def __str__(self):
         return self.order_id + ' ' + self.recipient
-        
+
 class To_do_list(models.Model):
     id = models.UUIDField(primary_key=True, default = uuid.uuid4)
     text = models.CharField(max_length=64)
     deadline = models.DateField()
     done = models.BooleanField(default=False)
     def __str__(self):
-        return self.id + ' ' + self.done
+        return self.id + " " + self.done
 
 class Abuse_reports(models.Model):
     VIOLATION=( 
@@ -72,9 +72,9 @@ class Abuse_reports(models.Model):
         ('Flagged Content', 'Flagged Content'),
     )
     id = models.UUIDField(primary_key=True, default = uuid.uuid4)
-    user = models.ForeignKey('User.User', on_delete=models.CASCADE)
+    user = models.ForeignKey('User.User', default=0, on_delete=models.CASCADE)
     date =  models.DateField()
-    violation = models.SmallIntegerField(default = 0, choices=VIOLATION)
+    violation = models.CharField(max_length=200, default = 0, choices=VIOLATION)
     by_user = models.BooleanField()
     by_system = models.BooleanField()
     def __str__(self):
@@ -88,9 +88,9 @@ class Bug_reports(models.Model):
     )
 
     id = models.UUIDField(primary_key=True, default = uuid.uuid4)
-    user = models.ForeignKey('User.User', on_delete=models.CASCADE)
+    user = models.ForeignKey('User.User', default=0,on_delete=models.CASCADE)
     date = models.DateField()
-    category = models.SmallIntegerField(default=0, choices=CATEGORY)
+    category = models.CharField(max_length=300, default=0, choices=CATEGORY)
     detail = models.TextField()
     def __str__(self):
         return self.id + ' ' + self.category

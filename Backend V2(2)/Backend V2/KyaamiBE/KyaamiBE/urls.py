@@ -1,3 +1,4 @@
+
 """KyaamiBE URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -15,7 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from Admin import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('comment access/', views.comment_list),
+    path('admin access/', views.admin_list),
+    path('log access/', views.log_Record_list),
+    path('purchase access/',views.purchase_list),
+    path('order access/', views.order_list),
+    path('todo access/', views.to_do_list),
+    path('abuse access/', views.abuse_list),
+    path('bug access/', views.Bug_list),
 ]

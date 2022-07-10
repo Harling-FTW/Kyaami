@@ -13,6 +13,5 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
-
 class Artist(models.Model):
     artist_id = models.ForeignKey(User, on_delete=models.CASCADE)
